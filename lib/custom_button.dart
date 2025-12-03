@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-class  CustomButton extends StatelessWidget {
+class CustomButton extends StatelessWidget {
   final String texto;
   final VoidCallback? onPressed;
   final Color? colorFondo;

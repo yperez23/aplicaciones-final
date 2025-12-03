@@ -1,45 +1,58 @@
-import 'package:flutter/widgets.dart';
-import 'package:my_design/new_screen.dart';
+import 'package:flutter/material.dart';
+import 'login.dart';
+import 'sign_up.dart';
 import 'custom_button.dart';
-import 'custom_input.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
 
+  void _navigate(BuildContext context, Widget target) {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => target,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          final tween = Tween(begin: const Offset(1, 0), end: Offset.zero);
+          final curved =
+              CurvedAnimation(parent: animation, curve: Curves.easeInOut);
+          return SlideTransition(position: tween.animate(curved), child: child);
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        CustomInput(text: "Ingrese texto", controller: TextEditingController(), label: "Contraseña", isPassword: true,),
-        CustomButton(
-          texto: "Ir a nueva pantalla",
-          onPressed: () {
-            // Navegar a la pantalla nueva
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    const NewScreen(),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  // Animación de transición (deslizamiento simple)
-                  final tween =
-                      Tween(begin: const Offset(1, 0), end: Offset.zero);
-                  final curvedAnimation = CurvedAnimation(
-                      parent: animation, curve: Curves.easeInOut);
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 60),
+          const Text(
+            "Bienvenido",
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 60),
 
-                  return SlideTransition(
-                    position: tween.animate(curvedAnimation),
-                    child: child,
-                  );
-                },
-              ),
-            );
-          },
-        ),
-      ],
-    ));
+          // Botón Login
+          CustomButton(
+            texto: "Iniciar Sesión",
+            onPressed: () => _navigate(context, const LoginScreen()),
+          ),
+
+          const SizedBox(height: 20),
+
+          // Botón Signup
+          CustomButton(
+            texto: "Registrarse",
+            colorFondo: Color(0xFF00AA55),
+            onPressed: () => _navigate(context, const SignupScreen()),
+          ),
+        ],
+      ),
+    );
   }
 }

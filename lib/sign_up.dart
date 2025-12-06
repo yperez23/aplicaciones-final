@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'custom_input.dart';
 import 'custom_button.dart';
+import 'location_service.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -17,6 +18,22 @@ class _SignupScreenState extends State<SignupScreen> {
   final telefonoCtrl = TextEditingController();
   final passCtrl = TextEditingController();
   final passConfirmCtrl = TextEditingController();
+
+  Future<void> _obtenerUbicacion() async {
+    final position = await LocationService.getCurrentLocation();
+    if (position != null) {
+      print("Latitud: ${position.latitude}");
+      print("Longitud: ${position.longitude}");
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Ubicación obtenida")),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("No se pudo obtener ubicación")),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +75,7 @@ class _SignupScreenState extends State<SignupScreen> {
             const SizedBox(height: 20),
             CustomButton(
               texto: "Registrarse",
-              onPressed: () {},
+              onPressed: _obtenerUbicacion,
             ),
           ],
         ),
